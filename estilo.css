@@ -1,17 +1,10 @@
-/* Estilos gerais */
-* {
-    margin: 5px;
-    padding: 5px;
-    border-color: rgb(0, 0, 0);
-}
+
 
 body {
     color: rgb(175, 175, 175);
     background-color: rgb(36, 35, 36);
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 10px;
-    width: 1200px; /* Largura fixa */
-    height: 955px; /* Altura fixa */
     position: relative;
     margin: 20px auto; /* Centraliza horizontalmente na tela */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor da página */
@@ -39,4 +32,3 @@ button:hover {
 input {
     color: black;
 }
-
