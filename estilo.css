@@ -1,0 +1,42 @@
+/* Estilos gerais */
+* {
+    margin: 5px;
+    padding: 5px;
+    border-color: rgb(0, 0, 0);
+}
+
+body {
+    color: rgb(175, 175, 175);
+    background-color: rgb(36, 35, 36);
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    width: 1200px; /* Largura fixa */
+    height: 955px; /* Altura fixa */
+    position: relative;
+    margin: 20px auto; /* Centraliza horizontalmente na tela */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor da página */
+}
+
+h1, h2, h3, h4 {
+    color: rgb(144, 144, 226);
+}
+
+button {
+    color: rgb(68, 67, 67);
+    background-color: rgb(144, 144, 226);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: rgb(132, 231, 86);
+    color: rgb(68, 67, 67);
+}
+
+input {
+    color: black;
+}
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversão de Coordenadas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"></script>
+    <style>
+        body {
+            background-color: rgb(68, 67, 67);
+        }
+        h1, h2, label, p {
+            color: black;
+        }
+        button {
+            color: rgb(144, 144, 226);
+            background-color: transparent;
+            border: 1px solid rgb(144, 144, 226);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: rgb(132, 231, 86);
+            color: rgb(68, 67, 67);
+        }
+        input {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversão de Coordenadas</h1>
+
+    <h2>Graus Decimais para UTM</h2>
+    <label for="latitude">Latitude:</label>
+    <input type="number" id="latitude" step="any">
+    <br><br>
+    <label for="longitude">Longitude:</label>
+    <input type="number" id="longitude" step="any">
+    <br><br>
+    <button onclick="convertCoordinatesToUTM()">Converter para UTM</button>
+    <br><br>
+    <p id="utmConversionResult"></p>
+
+    <h2>UTM para Graus Decimais</h2>
+    <label for="utmEasting">UTM E:</label>
+    <input type="number" id="utmEasting" step="any">
+    <br><br>
+    <label for="utmNorthing">UTM N:</label>
+    <input type="number" id="utmNorthing" step="any">
+    <br><br>
+    <button onclick="convertCoordinatesToDegrees()">Converter para Graus Decimais</button>
+    <br><br>
+    <p id="degreesConversionResult"></p>
+
+    <!-- Script JavaScript -->
+    <script>
+        // Definir os sistemas de referência
+        const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+
+        // Função para determinar a zona UTM com base na longitude
+        function getUTMZone(longitude) {
+            return Math.floor((longitude + 180) / 6) + 1;
+        }
+
+        // Função para determinar o hemisfério baseado na latitude
+        function getUTMHemisphere(latitude) {
+            return latitude >= 0 ? 'Norte' : 'Sul';
+        }
+
+        // Função para converter coordenadas para UTM e exibir o resultado
+        function convertCoordinatesToUTM() {
+            var latitude = parseFloat(document.getElementById('latitude').value);
+            var longitude = parseFloat(document.getElementById('longitude').value);
+            
+            var utmZone = getUTMZone(longitude);
+            var utmHemisphere = getUTMHemisphere(latitude);
+            const utmProj = `+proj=utm +zone=${utmZone} +ellps=WGS84 +datum=WGS84 +units=m +no_defs ${utmHemisphere === 'Norte' ? '+north' : '+south'}`;
+            
+            // Chamada à função de conversão de coordenadas usando proj4js
+            var utmCoords = proj4(wgs84, utmProj, [longitude, latitude]);
+            
+            // Exibir o resultado na página
+            var resultDiv = document.getElementById('utmConversionResult');
+            resultDiv.innerHTML = `UTM E: ${utmCoords[0].toFixed(2)}, UTM N: ${utmCoords[1].toFixed(2)}, Zona UTM: ${utmZone}, Hemisfério: ${utmHemisphere}`;
+        }
+
+        // Função para converter coordenadas UTM para graus decimais e exibir o resultado
+        function convertCoordinatesToDegrees() {
+            var utmEasting = parseFloat(document.getElementById('utmEasting').value);
+            var utmNorthing = parseFloat(document.getElementById('utmNorthing').value);
+            
+            // Pegue as coordenadas de longitude e latitude para determinar a zona e o hemisfério
+            var longitude = parseFloat(document.getElementById('longitude').value);
+            var latitude = parseFloat(document.getElementById('latitude').value);
+            var utmZone = getUTMZone(longitude);
+            var utmHemisphere = getUTMHemisphere(latitude);
+            const utmProj = `+proj=utm +zone=${utmZone} +ellps=WGS84 +datum=WGS84 +units=m +no_defs ${utmHemisphere === 'Norte' ? '+north' : '+south'}`;
+
+            // Chamada à função de conversão de coordenadas usando proj4js
+            var decimalCoords = proj4(utmProj, wgs84, [utmEasting, utmNorthing]);
+            
+            // Exibir o resultado na página
+            var resultDiv = document.getElementById('degreesConversionResult');
+            resultDiv.innerHTML = `Latitude: ${decimalCoords[1].toFixed(6)}, Longitude: ${decimalCoords[0].toFixed(6)}`;
+        }
+    </script>
+</body>
+</html>
